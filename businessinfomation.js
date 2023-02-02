@@ -1,6 +1,6 @@
 import urlencode from "urlencode";
 import axios from "axios";
-import { DISPLAY_COUNT } from "./constFile/const.js";
+import { DISPLAY_COUNT } from "./src/constFile/const.js";
 import { LOCATION_1, LOCATION_2 } from "./Location/Location.js";
 import pkg from "lodash";
 import fs from "fs";
