@@ -5,9 +5,10 @@
     "express": "^4.18.2",
     "fs": "^0.0.1-security",
     "lodash": "^4.17.21",
+    "node-schedule": "^2.1.1",
     "urlencode": "^1.1.0"
   },
   "scripts": {
-    "start": "node businessinfomation.js"
+    "start": "node ./src/autoBusinessInfo.js"
   }
 }
