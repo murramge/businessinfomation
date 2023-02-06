@@ -3,9 +3,10 @@
 
 ###
 #전화번호가 DB에 존재하는지 체크하는 API
+#1분에 20회 제한
 #요청 데이터
 #count:  요청 전화번호 갯수 [ 현재는 의미 없으나 추후 사용 가능성 있음 ]
-#phonNumber: 요청 전화번호 목록
+#phonNumber: 요청 전화번호 목록 최대 50개
 POST {{baseUrl}}/api/bizData/exists HTTP/1.1
 Content-Type: application/json
 
