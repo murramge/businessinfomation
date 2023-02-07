@@ -490,7 +490,10 @@
 //   "서귀포시",
 // ];
 
-export const TEST_LOCATION = ["서울특별시 종로구 종로1가"];
+export const TEST_LOCATION = [
+  "경상남도 창원시 의창구 동읍",
+  "경상남도 창원시 의창구 소답동",
+];
 
 export const LOCATION = [
   "서울특별시 종로구 세종로",

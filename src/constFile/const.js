@@ -1,1 +1,1 @@
-export const DISPLAY_COUNT = 1;
+export const DISPLAY_COUNT = 10;

@@ -21,3 +21,6 @@ https://sulung-sulung.tistory.com/32
 https://www.letmecompile.com/javascript-crawler-tutorial-part3/
 
 https://geniuskch.tistory.com/435
+
+existSync (파일)
+https://atsky.tistory.com/6
