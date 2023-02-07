@@ -2,7 +2,7 @@ import { TEST_LOCATION } from "../Location/Location.js";
 import fs from "fs";
 import { searchFromNaver } from "../requestAutoBusinessInfo/requestInfo";
 import { get, uniqBy } from "lodash";
-import { bb } from "../API/ApidataExistCheck.js";
+import { ApiExistCheck } from "../API/ApidataExistCheck.js";
 
 const TEST_WORD = ["음식점"];
 
@@ -140,7 +140,7 @@ export const resultList = (async () => {
 
   if (fs.existsSync("result.json")) {
     (async () => {
-      const result = await bb;
+      const result = await ApiExistCheck;
       result.data.forEach((data: ApiDataType) => {
         console.log(data.exists);
       });

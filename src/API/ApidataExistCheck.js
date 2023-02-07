@@ -1,7 +1,7 @@
 import fs from "fs";
 import { API_AXIOS } from "../constFile/Axios.js";
 
-export const bb = (async () => {
+export const ApiExistCheck = (async () => {
   let phoneNumber = [];
   if (fs.existsSync("result.json")) {
     const file = await fs.promises.readFile("result.json");
