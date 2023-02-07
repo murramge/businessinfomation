@@ -24,3 +24,11 @@ https://geniuskch.tistory.com/435
 
 existSync (파일)
 https://atsky.tistory.com/6
+
+크롤링 config logger 나눔
+https://github.com/imtaehyun/stock-crawler/commit/db189cee7f4d9437c0d9790a3b5a9c9706e9a88b
+
+https://github.com/topsite/openwrt-Project/commit/db22212ead99fc8bf02253af51dcfe694d0d01da
+
+로깅
+https://yceffort.kr/2021/02/logging-in-nodejs

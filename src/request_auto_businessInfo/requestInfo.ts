@@ -1,6 +1,6 @@
 import urlencode from "urlencode";
 import axios from "axios";
-import { DISPLAY_COUNT } from "../constFile/const.js";
+import { DISPLAY_COUNT } from "../const_file/const.js";
 
 import pkg from "lodash";
 

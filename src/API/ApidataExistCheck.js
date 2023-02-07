@@ -1,24 +1,20 @@
 import fs from "fs";
-import { API_AXIOS } from "../constFile/Axios.js";
+import { API_AXIOS } from "../const_file/Axios.js";
 
-export const ApiExistCheck = (async () => {
+export async function ApiExistCheck(item) {
   let phoneNumber = [];
-  if (fs.existsSync("result.json")) {
-    const file = await fs.promises.readFile("result.json");
-    const item = JSON.parse(file.toString());
-    item.forEach((itemd, index) => {
-      phoneNumber.push(itemd.DBSaveTel);
-    });
-    // console.log("result.json 파일 존재");
-  }
+
+  item.forEach((itemd, index) => {
+    phoneNumber.push(itemd.DBSaveTel);
+  });
 
   const dataexist = async () => {
     const response = await API_AXIOS.post(`/exists`, {
       count: 100,
       phoneNumber: phoneNumber,
     });
-    return response.data.data;
+    return response.data;
   };
 
   return dataexist();
-})();
+}

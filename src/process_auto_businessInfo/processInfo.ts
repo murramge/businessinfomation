@@ -1,8 +1,8 @@
-import { TEST_LOCATION } from "../Location/Location.js";
+import { TEST_LOCATION } from "../location/Location.js";
 import fs from "fs";
-import { searchFromNaver } from "../requestAutoBusinessInfo/requestInfo";
-import { get, uniqBy } from "lodash";
-import { ApiExistCheck } from "../API/ApidataExistCheck.js";
+import { searchFromNaver } from "../request_auto_businessInfo/requestInfo";
+import { defaultTo, get, uniqBy } from "lodash";
+import { ApiExistCheck } from "../api/ApidataExistCheck.js";
 
 const TEST_WORD = ["음식점"];
 
@@ -29,6 +29,47 @@ const importQuerys = async (
   return targets;
 };
 
+interface resultList {
+  Id: number;
+  Tel: string;
+  DBSaveTel: number;
+  CompanyName: string;
+  VirtualTel: string;
+  Address: string;
+  RoadAddress: string;
+  AbbrAddress: string;
+  ShortAddress: string[];
+  BusinessSi: string;
+  BusinessGu: string;
+  BusinessDong: string;
+  RoadBasic: string;
+  RoadBasicNo: string;
+  RoadOnlyAddr: string;
+  ZoneBasic: string;
+  ZoneBasicNo: string;
+  ZoneOnlyAddr: string;
+  Category: string[];
+  BusinessHours: string;
+  BreakTime: string;
+  LastOrder: string;
+  HomePage: string;
+  BusinessStatus: string;
+  Description: string;
+  ThumURL: string[];
+  MenuInfo: string[];
+  XValue: string;
+  YValue: string;
+  CardPayMent: any;
+  ParkingPrice: string;
+  RequestId: number;
+  IsInsert: number;
+  InsertMCode: string;
+  AssembleId: number;
+  ReviewCount: number;
+  imageCount: number;
+  searchedQuery: string;
+}
+
 export const resultList = (async () => {
   const result = await importQuerys(TEST_LOCATION, TEST_WORD, (item) =>
     removerList(item)
@@ -37,46 +78,6 @@ export const resultList = (async () => {
     const times = BusinessTimes(item);
     const address = BusinessAddress(item);
     const dbSaveTel = item.tel.replace(/-/g, "");
-    interface resultList {
-      Id: number;
-      Tel: string;
-      DBSaveTel: number;
-      CompanyName: string;
-      VirtualTel: string;
-      Address: string;
-      RoadAddress: string;
-      AbbrAddress: string;
-      ShortAddress: string[];
-      BusinessSi: string;
-      BusinessGu: string;
-      BusinessDong: string;
-      RoadBasic: string;
-      RoadBasicNo: string;
-      RoadOnlyAddr: string;
-      ZoneBasic: string;
-      ZoneBasicNo: string;
-      ZoneOnlyAddr: string;
-      Category: string[];
-      BusinessHours: string;
-      BreakTime: string;
-      LastOrder: string;
-      HomePage: string;
-      BusinessStatus: string;
-      Description: string;
-      ThumURL: string[];
-      MenuInfo: string[];
-      XValue: string;
-      YValue: string;
-      CardPayMent: any;
-      ParkingPrice: string;
-      RequestId: number;
-      IsInsert: number;
-      InsertMCode: string;
-      AssembleId: number;
-      ReviewCount: number;
-      imageCount: number;
-      searchedQuery: string;
-    }
 
     const resultList: resultList = {
       Id: item.id,
@@ -127,28 +128,50 @@ export const resultList = (async () => {
   });
 
   //네이버 api 불러왔을 때, item들 각각의 중복제거
+  //이건, 네이버 측에서 같은 데이터를 가져왔을 때 걸러주려고 하는 것임.
   resultJson = uniqBy(resultJson, "Tel");
   resultJson = uniqBy(resultJson, "RoadAddress");
 
   console.log(`[ ${resultJson.length} ] 개 데이터 수집됨`);
 
-  type ApiDataType = {
-    phoneNumber: number;
-    situationCode: number;
-    exists: boolean;
-  };
-
   if (fs.existsSync("result.json")) {
+    const file = await fs.promises.readFile("result.json");
+    const jsonfile: resultList[] = JSON.parse(file.toString());
+
+    const compareResult = JSON.stringify(resultJson);
+    const compareJSON = JSON.stringify(jsonfile);
+
+    if (compareResult != compareJSON) {
+      resultJson = jsonfile.concat(resultJson);
+      console.log("result.json 데이터 병합");
+    }
+
     (async () => {
-      const result = await ApiExistCheck;
-      result.data.forEach((data: ApiDataType) => {
-        console.log(data.exists);
+      const result = await ApiExistCheck(resultJson);
+      const DBdata = result.data.data;
+      let dataArr: any = [];
+      let dbdataArr: any = [];
+      DBdata.map((data: any) => {
+        if (data.exists === false) {
+          dataArr.push(data);
+        }
       });
+
+      dataArr.forEach((data: any) => {
+        resultJson.forEach((rjson: any) => {
+          if (data.phoneNumber === rjson.DBSaveTel) {
+            dbdataArr.push(rjson);
+          }
+        });
+      });
+      fs.writeFile("dbdata.json", JSON.stringify(dbdataArr), function (err) {
+        if (err) throw err;
+      });
+      console.log(dbdataArr);
     })();
   }
 
   console.log(`TOTAL : [ ${resultJson.length} ] 개 데이터 수집됨`);
-
   fs.writeFile("result.json", JSON.stringify(resultJson), function (err) {
     if (err) throw err;
   });
