@@ -1,40 +1,23 @@
-import { TEST_LOCATION } from "../location/Location.js";
-import fs from "fs";
-import { searchFromNaver } from "../request_auto_businessInfo/requestInfo";
-import { defaultTo, get, uniqBy } from "lodash";
-import { ProcessApiExistCheck } from "./apiProcessInfo";
-import { resultLists } from "./interface.js";
-const config = require("../../config.json");
+import { get, uniqBy } from "lodash";
+import { resultLists } from "../../interface/output";
+import { ProcessApiExistCheck } from "./api_process";
 
-const importQuerys = async (
-  locations: string[],
-  words: string[],
-  handlefilterlist = (any: any) => true,
-  handlefilterDetail = () => true
-) => {
-  let targets: string[] = [];
-
+export async function processQuery(locations: string[], words: string[]) {
+  let resultQuery: string[] = [];
   for (let wordindex = 0; wordindex < words.length; wordindex++) {
     const word = words[wordindex];
     for (let placeindex = 0; placeindex < locations.length; placeindex++) {
       const location = locations[placeindex];
-      await new Promise((time) => setTimeout(time, config.defaultApiDelay));
+      await new Promise((time) => setTimeout(time, 1000));
       const query = `${location} ${word}`;
-      let searchList = await searchFromNaver(query);
-      searchList = searchList.filter((item: any) => handlefilterlist(item));
-
-      targets = targets.concat(searchList);
+      resultQuery = resultQuery.concat(query);
     }
   }
-  return targets;
-};
-const TEST_WORD = ["음식점"];
+  return resultQuery;
+}
 
-export const resultList = (async () => {
-  const result = await importQuerys(TEST_LOCATION, TEST_WORD, (item) =>
-    removerList(item)
-  );
-  let resultJson = result.map((item?: any) => {
+export function processData(result?: any) {
+  let data = result.map((item?: any) => {
     const times = BusinessTimes(item);
     const address = BusinessAddress(item);
     const dbSaveTel = item.tel.replace(/-/g, "");
@@ -87,27 +70,12 @@ export const resultList = (async () => {
     return resultList;
   });
 
-  //네이버 api 불러왔을 때, item들 각각의 중복제거
-  //이건, 네이버 측에서 같은 데이터를 가져왔을 때 걸러주려고 하는 것임.
-  resultJson = uniqBy(resultJson, "Tel");
-  resultJson = uniqBy(resultJson, "RoadAddress");
+  data = uniqBy(data, "Tel");
+  data = uniqBy(data, "RoadAddress");
 
-  ProcessApiExistCheck(resultJson);
-})();
-
-const removerList = (item: any) => {
-  if (item.tel.substr(0, 3) === "010") return false;
-  if (item.tel.substr(0, 3) === "050") return false;
-  if (item.tel.substr(0, 3) === "011") return false;
-  if (item.isAdultBusiness === true) return false;
-
-  if (!item.roadAddress) {
-    return false;
-  } else {
-    // console.log(item);
-  }
-  return true;
-};
+  ProcessApiExistCheck(data);
+  return data;
+}
 
 const BusinessAddress = (item: any) => {
   let Address: any = {};

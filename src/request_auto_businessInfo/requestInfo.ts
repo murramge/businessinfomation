@@ -25,6 +25,7 @@ export const searchFromNaver = async (query: any) => {
       return `${paramkey}=${urlencode(param[paramkey as keyof defaultParam])}`;
     })
     .join("&");
+
   const naverUrl = `https://map.naver.com/v5/api/search?${params}`;
 
   const result = await axios.get(naverUrl);

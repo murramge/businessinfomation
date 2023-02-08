@@ -1,5 +1,5 @@
-import { resultLists } from "./interface";
-import { ApiExistCheck } from "../api/ApidataExistCheck";
+import { resultLists } from "../../interface/output";
+import { ApiExistCheck } from "../../api/ApidataExistCheck";
 
 import fs from "fs";
 

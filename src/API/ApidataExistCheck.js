@@ -1,4 +1,3 @@
-import fs from "fs";
 import { API_AXIOS } from "../const_file/Axios.js";
 
 export async function ApiExistCheck(item) {
