@@ -1,10 +1,8 @@
 import urlencode from "urlencode";
 import axios from "axios";
-import { DISPLAY_COUNT } from "../const_file/const.js";
-
 import pkg from "lodash";
-
 const { get } = pkg;
+const config = require("../../config.json");
 
 export const searchFromNaver = async (query: any) => {
   interface defaultParam {
@@ -16,7 +14,7 @@ export const searchFromNaver = async (query: any) => {
   const defaultParam: defaultParam = {
     caller: "pcweb",
     type: "place",
-    displayCount: DISPLAY_COUNT,
+    displayCount: config.defaultDisplayCount,
   };
   const param = {
     ...defaultParam,

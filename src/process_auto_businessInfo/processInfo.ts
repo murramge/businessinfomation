@@ -2,10 +2,9 @@ import { TEST_LOCATION } from "../location/Location.js";
 import fs from "fs";
 import { searchFromNaver } from "../request_auto_businessInfo/requestInfo";
 import { defaultTo, get, uniqBy } from "lodash";
-import { ApiExistCheck } from "../api/ApidataExistCheck.js";
 import { ProcessApiExistCheck } from "./apiProcessInfo";
-
-const TEST_WORD = ["음식점"];
+import { resultLists } from "./interface.js";
+const config = require("../../config.json");
 
 const importQuerys = async (
   locations: string[],
@@ -19,7 +18,7 @@ const importQuerys = async (
     const word = words[wordindex];
     for (let placeindex = 0; placeindex < locations.length; placeindex++) {
       const location = locations[placeindex];
-      await new Promise((time) => setTimeout(time, 1000));
+      await new Promise((time) => setTimeout(time, config.defaultApiDelay));
       const query = `${location} ${word}`;
       let searchList = await searchFromNaver(query);
       searchList = searchList.filter((item: any) => handlefilterlist(item));
@@ -29,47 +28,7 @@ const importQuerys = async (
   }
   return targets;
 };
-
-interface resultList {
-  Id: number;
-  Tel: string;
-  DBSaveTel: number;
-  CompanyName: string;
-  VirtualTel: string;
-  Address: string;
-  RoadAddress: string;
-  AbbrAddress: string;
-  ShortAddress: string[];
-  BusinessSi: string;
-  BusinessGu: string;
-  BusinessDong: string;
-  RoadBasic: string;
-  RoadBasicNo: string;
-  RoadOnlyAddr: string;
-  ZoneBasic: string;
-  ZoneBasicNo: string;
-  ZoneOnlyAddr: string;
-  Category: string[];
-  BusinessHours: string;
-  BreakTime: string;
-  LastOrder: string;
-  HomePage: string;
-  BusinessStatus: string;
-  Description: string;
-  ThumURL: string[];
-  MenuInfo: string[];
-  XValue: string;
-  YValue: string;
-  CardPayMent: any;
-  ParkingPrice: string;
-  RequestId: number;
-  IsInsert: number;
-  InsertMCode: string;
-  AssembleId: number;
-  ReviewCount: number;
-  imageCount: number;
-  searchedQuery: string;
-}
+const TEST_WORD = ["음식점"];
 
 export const resultList = (async () => {
   const result = await importQuerys(TEST_LOCATION, TEST_WORD, (item) =>
@@ -80,7 +39,7 @@ export const resultList = (async () => {
     const address = BusinessAddress(item);
     const dbSaveTel = item.tel.replace(/-/g, "");
 
-    const resultList: resultList = {
+    const resultList: resultLists = {
       Id: item.id,
       Tel: item.tel,
       DBSaveTel: dbSaveTel,

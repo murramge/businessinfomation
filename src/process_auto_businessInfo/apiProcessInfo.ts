@@ -1,3 +1,4 @@
+import { resultLists } from "./interface";
 import { ApiExistCheck } from "../api/ApidataExistCheck";
 
 import fs from "fs";
@@ -14,7 +15,7 @@ export async function ProcessApiExistCheck(resultJson: any) {
   });
 
   dataArr.forEach((data: any) => {
-    resultJson.forEach((rjson: any) => {
+    resultJson.forEach((rjson: resultLists) => {
       if (data.phoneNumber === rjson.DBSaveTel) {
         dbdataArr.push(rjson);
       }
