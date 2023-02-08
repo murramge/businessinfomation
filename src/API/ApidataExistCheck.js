@@ -10,7 +10,7 @@ export async function ApiExistCheck(item) {
 
   const dataexist = async () => {
     const response = await API_AXIOS.post(`/exists`, {
-      count: 100,
+      count: 50,
       phoneNumber: phoneNumber,
     });
     return response.data;

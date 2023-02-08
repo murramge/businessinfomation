@@ -3,6 +3,7 @@ import fs from "fs";
 import { searchFromNaver } from "../request_auto_businessInfo/requestInfo";
 import { defaultTo, get, uniqBy } from "lodash";
 import { ApiExistCheck } from "../api/ApidataExistCheck.js";
+import { ProcessApiExistCheck } from "./apiProcessInfo";
 
 const TEST_WORD = ["음식점"];
 
@@ -109,7 +110,7 @@ export const resultList = (async () => {
       BusinessStatus: item.bizhourInfo,
       Description: item.description,
       ThumURL: item.thumUrls,
-      MenuInfo: item.menuInfo.split("|"),
+      MenuInfo: [] || item.menuInfo.split("|"),
       CardPayMent: item.card == null ? "업체에 문의해주세요" : item.card,
       ParkingPrice:
         item.parkingPrice == null ? "업체에 문의해주세요" : item.parkingPrice,
@@ -132,49 +133,7 @@ export const resultList = (async () => {
   resultJson = uniqBy(resultJson, "Tel");
   resultJson = uniqBy(resultJson, "RoadAddress");
 
-  console.log(`[ ${resultJson.length} ] 개 데이터 수집됨`);
-
-  if (fs.existsSync("result.json")) {
-    const file = await fs.promises.readFile("result.json");
-    const jsonfile: resultList[] = JSON.parse(file.toString());
-
-    const compareResult = JSON.stringify(resultJson);
-    const compareJSON = JSON.stringify(jsonfile);
-
-    if (compareResult != compareJSON) {
-      resultJson = jsonfile.concat(resultJson);
-      console.log("result.json 데이터 병합");
-    }
-
-    (async () => {
-      const result = await ApiExistCheck(resultJson);
-      const DBdata = result.data.data;
-      let dataArr: any = [];
-      let dbdataArr: any = [];
-      DBdata.map((data: any) => {
-        if (data.exists === false) {
-          dataArr.push(data);
-        }
-      });
-
-      dataArr.forEach((data: any) => {
-        resultJson.forEach((rjson: any) => {
-          if (data.phoneNumber === rjson.DBSaveTel) {
-            dbdataArr.push(rjson);
-          }
-        });
-      });
-      fs.writeFile("dbdata.json", JSON.stringify(dbdataArr), function (err) {
-        if (err) throw err;
-      });
-      console.log(dbdataArr);
-    })();
-  }
-
-  console.log(`TOTAL : [ ${resultJson.length} ] 개 데이터 수집됨`);
-  fs.writeFile("result.json", JSON.stringify(resultJson), function (err) {
-    if (err) throw err;
-  });
+  ProcessApiExistCheck(resultJson);
 })();
 
 const removerList = (item: any) => {
