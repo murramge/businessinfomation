@@ -1,19 +1,29 @@
 import { get, uniqBy } from "lodash";
 import { resultLists } from "../../interface/output";
 import { ProcessApiExistCheck } from "./api_process";
+import naver_api from "../../crawler/naver_map/naver_api";
 
 export async function processQuery(locations: string[], words: string[]) {
-  let resultQuery: string[] = [];
+  let resultData: string[] = [];
   for (let wordindex = 0; wordindex < words.length; wordindex++) {
     const word = words[wordindex];
     for (let placeindex = 0; placeindex < locations.length; placeindex++) {
       const location = locations[placeindex];
       await new Promise((time) => setTimeout(time, 1000));
       const query = `${location} ${word}`;
-      resultQuery = resultQuery.concat(query);
+      let result = await naver_api.naverRequestAPI({
+        query: query,
+      });
+      const searchquery = get(result, "data.result.place.list", []).map(
+        (item: any) => ({
+          ...item,
+          searchedQuery: result.data.result.metaInfo.searchedQuery,
+        })
+      );
+      resultData = resultData.concat(searchquery);
     }
   }
-  return resultQuery;
+  return resultData;
 }
 
 export function processData(result?: any) {
@@ -59,7 +69,7 @@ export function processData(result?: any) {
       XValue: item.x,
       YValue: item.y,
       IsInsert: 0,
-      InsertMCode: "bb-90060",
+      InsertMCode: "bb-90083",
       AssembleId: 0,
       RequestId: 99999999,
       ReviewCount: item.reviewCount,
@@ -73,7 +83,14 @@ export function processData(result?: any) {
   data = uniqBy(data, "Tel");
   data = uniqBy(data, "RoadAddress");
 
-  ProcessApiExistCheck(data);
+  let phoneNumber: number[] = [];
+
+  data.forEach((item: resultLists) => {
+    phoneNumber.push(item.DBSaveTel);
+  });
+
+  ProcessApiExistCheck(phoneNumber, data);
+
   return data;
 }
 

@@ -1,13 +1,15 @@
 import { resultLists } from "../../interface/output";
-import { ApiExistCheck } from "../../api/ApidataExistCheck";
 
 import fs from "fs";
+import api from "../../api/api";
 
-export async function ProcessApiExistCheck(resultJson: any) {
-  const result = await ApiExistCheck(resultJson);
-  const DBdata = result.data.data;
+export async function ProcessApiExistCheck(phonenumber: any, datas: any) {
+  const result = await api.existCheck(phonenumber);
+  const DBdata = result.data.data.data;
+
   let dataArr: any = [];
   let dbdataArr: any = [];
+
   DBdata.map((data: any) => {
     if (data.exists === false) {
       dataArr.push(data);
@@ -15,12 +17,13 @@ export async function ProcessApiExistCheck(resultJson: any) {
   });
 
   dataArr.forEach((data: any) => {
-    resultJson.forEach((rjson: resultLists) => {
+    datas.forEach((rjson: resultLists) => {
       if (data.phoneNumber === rjson.DBSaveTel) {
         dbdataArr.push(rjson);
       }
     });
   });
+
   fs.writeFile("dbdata.json", JSON.stringify(dbdataArr), function (err) {
     if (err) throw err;
   });

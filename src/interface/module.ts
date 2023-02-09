@@ -6,6 +6,6 @@ export interface CrawlingResult {
 
 export interface CrawlerModule {
   key: string;
-  crawling: (q: any) => Promise<CrawlingResult>;
+  crawling: () => Promise<CrawlingResult>;
   config: CrawlerConfig;
 }

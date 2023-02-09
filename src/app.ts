@@ -12,10 +12,10 @@ if (!targetModule) {
   process.exit();
 }
 
-(async function crawlingstart(query) {
+(async function () {
   let log = (str: string) =>
     console.log(`${new Date().toString()}: ${targetModule.key} : ${str}`);
   log(`크롤링 시작`);
-  const result = await targetModule.crawling(query);
+  const result = await targetModule.crawling();
   log(`${result.count}개 수집완료`);
 })();
