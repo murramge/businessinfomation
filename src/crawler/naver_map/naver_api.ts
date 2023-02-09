@@ -43,7 +43,7 @@ export default {
     const defaultParam: naverRequestAPIparams = {
       caller: "pcweb",
       type: "place",
-      displayCount: 2,
+      displayCount: 300,
     };
 
     let param = {

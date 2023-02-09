@@ -1,4 +1,4 @@
-import { API_AXIOS } from "../const_file/Axios";
+import { API_AXIOS } from "./Axios";
 
 export default {
   existCheck: async (phoneNumber: string[], count: number = 50) =>

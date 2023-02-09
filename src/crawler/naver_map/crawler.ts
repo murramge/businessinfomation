@@ -1,13 +1,8 @@
-import { get, defaults } from "lodash";
-import urlencode from "urlencode";
-
-import { processQuery } from "../../process/naver_map/data_process";
+import { processQuery } from "./data_process";
+import { processData } from "./data_process";
 import { CrawlerConfig } from "./../../interface/config";
-import axios from "axios";
 import { CrawlerModule } from "../../interface/module";
 import fs from "fs";
-import { processData } from "../../process/naver_map/data_process";
-import naver_api from "./naver_api";
 
 const json = fs.readFileSync(`${__dirname}/config.json`);
 const config: CrawlerConfig = JSON.parse(json.toString());
@@ -18,7 +13,7 @@ export async function Navercrawling() {
 
   let result: any = await processQuery(TEST_LOCATION, TEST_WORD);
 
-  const dataprocess = processData(result);
+  processData(result);
 
   return {
     count: result.length,
