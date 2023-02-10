@@ -3,7 +3,11 @@ import { resultLists } from "../../interface/output";
 import { ProcessApiExistCheck } from "./api_process";
 import naver_api from "../../crawler/naver_map/naver_api";
 
-export async function processQuery(locations: string[], words: string[]) {
+export async function processQuery(
+  locations: string[],
+  words: string[],
+  handlefilterlist = (any: any) => true
+) {
   let resultData: string[] = [];
   for (let wordindex = 0; wordindex < words.length; wordindex++) {
     const word = words[wordindex];
@@ -14,12 +18,13 @@ export async function processQuery(locations: string[], words: string[]) {
       let result = await naver_api.naverRequestAPI({
         query: query,
       });
-      const searchquery = get(result, "data.result.place.list", []).map(
+      let searchquery = get(result, "data.result.place.list", []).map(
         (item: any) => ({
           ...item,
           searchedQuery: result.data.result.metaInfo.searchedQuery,
         })
       );
+      searchquery = searchquery.filter((item: any) => handlefilterlist(item));
       resultData = resultData.concat(searchquery);
     }
   }

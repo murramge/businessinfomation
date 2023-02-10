@@ -1,7 +1,7 @@
 import { API_AXIOS } from "./Axios";
 
 export default {
-  existCheck: async (phoneNumber: string[], count: number = 50) =>
+  existCheck: (phoneNumber: string[], count: number = 20) =>
     API_AXIOS.post<{
       code: number;
       message: any;
