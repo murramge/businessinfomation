@@ -1,8 +1,8 @@
 import { resultLists } from "../../interface/output";
 import { uniqBy } from "lodash";
 import { chunk } from "lodash";
-const fs = require("fs");
 import api from "../../api/api";
+import { loger } from "../../app";
 
 export async function ProcessApiExistCheck(phonenumber: any, datas: any) {
   let chunkfiles: string[][] = chunk(phonenumber, 50);
@@ -21,6 +21,7 @@ export async function ProcessApiExistCheck(phonenumber: any, datas: any) {
                 dataArr.push(data);
               }
             });
+            loger(`${dataArr.length} 개의 데이터 저장`);
             dataArr.forEach((data: any) => {
               datas.forEach((rjson: resultLists) => {
                 if (data.phoneNumber === rjson.DBSaveTel) {
@@ -28,20 +29,22 @@ export async function ProcessApiExistCheck(phonenumber: any, datas: any) {
                 }
               });
             });
-            if (fs.existsSync("result1.json")) {
-              const file = await fs.promises.readFile("result1.json");
-              dbdataArr = JSON.parse(file.toString()).concat(dbdataArr);
-              dbdataArr = uniqBy(dbdataArr, "Tel");
-              dbdataArr = uniqBy(dbdataArr, "RoadAddress");
-            } else {
-              console.log(" ");
-            }
-            handlefsWrite("result1.json", dbdataArr);
+
+            // if (fs.existsSync("result1.json")) {
+            //   const file = await fs.promises.readFile("result1.json");
+            //   console.log(file.length);
+            //   dbdataArr = JSON.parse(file.toString()).concat(dbdataArr);
+            //   dbdataArr = uniqBy(dbdataArr, "Tel");
+            //   dbdataArr = uniqBy(dbdataArr, "RoadAddress");
+            // } else {
+            //   console.log(" ");
+            // }
+            // handlefsWrite("result1.json", dbdataArr);
           });
           i++;
           times(i);
         },
-        i == 0 ? 0 : 2000
+        i == 0 ? 0 : 60000
       );
     }
   }
@@ -129,11 +132,9 @@ export async function ProcessApiExistCheck(phonenumber: any, datas: any) {
 // handlefsWrite("result2.json", dbdataArr);
 // });
 
-const handlefsWrite = (filename, dataArr) => {
-  fs.promises.writeFile(filename, JSON.stringify(dataArr), function (err) {
-    if (err) throw err;
-  });
-};
+// const handlefsWrite = (filename, dataArr) => {
+//   fs.promises.writeFile(filename, JSON.stringify(dataArr));
+// };
 
 // if (fs.existsSync("result1.json")) {
 //   const file = await fs.promises.readFile("result1.json");

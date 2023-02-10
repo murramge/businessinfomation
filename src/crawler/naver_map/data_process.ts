@@ -13,7 +13,7 @@ export async function processQuery(
     const word = words[wordindex];
     for (let placeindex = 0; placeindex < locations.length; placeindex++) {
       const location = locations[placeindex];
-      await new Promise((time) => setTimeout(time, 1000));
+      await new Promise((time) => setTimeout(time, 10000));
       const query = `${location} ${word}`;
       let result = await naver_api.naverRequestAPI({
         query: query,
@@ -26,6 +26,7 @@ export async function processQuery(
       );
       searchquery = searchquery.filter((item: any) => handlefilterlist(item));
       resultData = resultData.concat(searchquery);
+      console.log(resultData.length);
     }
   }
   return resultData;

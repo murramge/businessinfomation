@@ -8,7 +8,7 @@ const json = fs.readFileSync(`${__dirname}/config.json`);
 const config: CrawlerConfig = JSON.parse(json.toString());
 
 export async function Navercrawling() {
-  const TEST_LOCATION = ["불당동", "두정동"];
+  const TEST_LOCATION = ["서울특별시 종로구 세종로"];
   const TEST_WORD = ["음식점"];
 
   let result: any = await processQuery(
