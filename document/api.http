@@ -24,3 +24,84 @@ Content-Type: application/json
     ]
 }
 
+# 크롤링 대상 지역 리스트 불러오기
+#- size : 가져올 개수 (1 ~ 30)
+###
+GET {{baseUrl}}/api/bizData/targetAreaName?size=30
+Content-Type: application/json
+###
+
+# 크롤링 완료시 호출 [ 지역 ]
+# areaName : 위의 GET API에서 받았던 지역명중 하나
+POST {{baseUrl}}/api/bizData/areaCollectComplete
+Content-Type: application/json
+
+{
+    "areaName": "충청남도 아산시 신동"
+}
+
+# 크롤링 대상 지역 리스트 불러오기
+# size : 가져올 개수 (1 ~ 30)
+###
+GET {{baseUrl}}/api/bizData/targetCategoryName?size=30
+Content-Type: application/json
+
+###
+# 크롤링 완료시 호출 [ 업종/카테고리 ]
+# categoryName :위의 GET API에서 받았던 업종/카테고리 데이터중 하나
+POST {{baseUrl}}/api/bizData/categoryCollectComplete
+Content-Type: application/json
+
+{
+    "categoryName":"비와별닭갈비"
+}
+
+###
+#크롤링 후 등록할 업체 정보 전달
+POST {{baseUrl}}/api/bizData/addBizCompany
+Content-Type: application/json
+
+{
+	"bizCompanyInfo": [
+        {
+            "id": "1293718759",
+            "name": "보슬보슬 역삼본점",
+            "tel": "02-6014-1245",
+            "category": [
+                "분식",
+                "종합분식"
+            ],
+            "categoryPath": [
+                [
+                "220036",
+                "220048",
+                "220185"
+                ],
+                [
+                "1004760",
+                "1004452"
+                ]
+            ],
+            "rcode": "09680101",
+            "address": "서울특별시 강남구 역삼동 824-29 1층 102호",
+            "roadAddress": "서울특별시 강남구 테헤란로8길 22 1층 102호",
+            "abbrAddress": "역삼동 824-29 1층 102호",
+            "shortAddress": [
+                "서울 강남구",
+                "테헤란로8길 22",
+                "1층 102호"
+            ],
+            "context": [],
+            "x": "127.0316278",
+            "y": "37.4974693",
+            "homePage": "http://www.보슬보슬.kr",
+            "menuInfo": "보슬키토 7,000 | 트러플키토마요 8,000 | 크래미키토 8,000 | 베이컨키토마요 8,000 | 보슬김밥 6,000 | 스팸보슬김밥 7,000 | 치즈보슬김밥 7,000 | 청양보슬마요김밥 7,000 | 멸치땡초김밥 7,000 | 바삭베이컨김밥 7,500 | 치즈참치김밥 7,000 | 묵은지참치김밥 7,500 | 더블돈까스김밥 7,500 | 삼겹묵은지김밥 8,500 | 계란라면 4,500 | 꿀밤마늘떡볶이(2인) 11,000 | 아삭쫄면 8,000 | 명란군만두 6,000 | 트러플짜파게티 15,000 | 차돌마늘떡볶이(2인) 15,000 | 묵참키토마요 8,000 | 꼬마키토모듬1 11,500 | 꼬마키토모듬2 11,500 | 꼬마키토모듬3 12,500 | 미니키토모듬1 13,000 | 미니키토모듬2 13,000 | 미니키토모듬3 14,000 | 제육 묵은지 김밥 8,000 | 묵참 키토마요 8,000",
+            "microReview": [
+                "달걀로 가득 찬 키토 김밥",
+                "강남역 정말 맛있는 김밥",
+                "계란이 가득한 보슬 김밥",
+                "속이 꽉 찬 키토김밥"
+            ]
+        }
+	]
+}
