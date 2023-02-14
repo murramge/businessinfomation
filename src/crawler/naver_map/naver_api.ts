@@ -1,4 +1,9 @@
 import axios from "axios";
+import fs from "fs";
+import { CrawlerConfig } from "../../interface/config";
+
+const json = fs.readFileSync(`${__dirname}/config.json`);
+const config: CrawlerConfig = JSON.parse(json.toString());
 
 interface SearchResult {
   result: {
@@ -43,7 +48,7 @@ export default {
     const defaultParam: naverRequestAPIparams = {
       caller: "pcweb",
       type: "place",
-      displayCount: 300,
+      displayCount: config.NaverdisplayCount,
     };
 
     let param = {

@@ -32,3 +32,16 @@ https://github.com/topsite/openwrt-Project/commit/db22212ead99fc8bf02253af51dcfe
 
 로깅
 https://yceffort.kr/2021/02/logging-in-nodejs
+
+노드 스케줄링 / cron 등
+https://medium.com/nodejs-server/node-schedule-pm2-8f7831ed231e
+
+https://nhj12311.tistory.com/474
+
+https://12340zszs.tistory.com/33
+
+pm2 실행 옵션
+https://inpa.tistory.com/entry/node-%F0%9F%93%9A-PM2-%EB%AA%A8%EB%93%88-%EC%82%AC%EC%9A%A9%EB%B2%95-%ED%81%B4%EB%9F%AC%EC%8A%A4%ED%84%B0-%EB%AC%B4%EC%A4%91%EB%8B%A8-%EC%84%9C%EB%B9%84%EC%8A%A4
+
+pm2 로그
+https://velog.io/@sinclebear/PM2-Log-%EC%82%AC%EC%9A%A9%EB%B0%A9%EB%B2%95

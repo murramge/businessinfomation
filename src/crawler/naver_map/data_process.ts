@@ -2,6 +2,12 @@ import { get, uniqBy } from "lodash";
 import { resultLists } from "../../interface/output";
 import { ProcessApiExistCheck } from "./api_process";
 import naver_api from "../../crawler/naver_map/naver_api";
+import fs from "fs";
+import { CrawlerConfig } from "../../interface/config";
+import api from "../../api/api";
+
+const json = fs.readFileSync(`${__dirname}/config.json`);
+const config: CrawlerConfig = JSON.parse(json.toString());
 
 export async function processQuery(
   locations: string[],
@@ -9,15 +15,21 @@ export async function processQuery(
   handlefilterlist = (any: any) => true
 ) {
   let resultData: string[] = [];
-  for (let wordindex = 0; wordindex < words.length; wordindex++) {
+  const AreaformData = new FormData();
+  const CategoryformData = new FormData();
+  let count = 0;
+  for (let wordindex = 0; wordindex < 1; wordindex++) {
     const word = words[wordindex];
     for (let placeindex = 0; placeindex < locations.length; placeindex++) {
       const location = locations[placeindex];
-      await new Promise((time) => setTimeout(time, 10000));
+      await new Promise((time) => setTimeout(time, config.NaverdelayMs));
       const query = `${location} ${word}`;
+      console.log(`processquery 값 : ${query}`);
+      console.log(count);
       let result = await naver_api.naverRequestAPI({
         query: query,
       });
+
       let searchquery = get(result, "data.result.place.list", []).map(
         (item: any) => ({
           ...item,
@@ -25,14 +37,28 @@ export async function processQuery(
         })
       );
       searchquery = searchquery.filter((item: any) => handlefilterlist(item));
+
       resultData = resultData.concat(searchquery);
-      console.log(resultData.length);
+      console.log(`아직 processData로 넘어가지 않은 값 ${resultData.length}`);
+      console.log(resultData);
+      AreaformData.append("areaName", location);
+      CategoryformData.append("categoryName", word);
+      await api.completeArea(AreaformData);
+      await api.completeCategory(CategoryformData);
+      AreaformData.delete("areaName");
+      CategoryformData.delete("categoryName");
+      console.log("complete");
+
+      console.log(result.data.result.metaInfo.searchedQuery);
+      count++;
     }
   }
   return resultData;
 }
 
 export function processData(result?: any) {
+  console.log(`process데이터 ${result.length}`);
+
   let data = result.map((item?: any) => {
     const times = BusinessTimes(item);
     const address = BusinessAddress(item);
@@ -82,7 +108,6 @@ export function processData(result?: any) {
       imageCount: get(item, "detail.images.length", 0),
       searchedQuery: item.searchedQuery,
     };
-
     return resultList;
   });
 

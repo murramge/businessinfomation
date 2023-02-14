@@ -1,0 +1,9 @@
+{
+  "scheduleAlltimeCode": "* * * * * *",
+  "schedule30sCode": "0/30 * * * * *",
+  "schedule1mCode": "0 0/1 * * * * ",
+  "schedule2mCode": "0 0/2 * * * * ",
+  "schedule5mCode": "0 0/5 * * * * ",
+  "schedule10mCode": "0 0/10 * * * * ",
+  "schedule1tCode": "0 0 0/1 * * * "
+}
