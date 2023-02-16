@@ -1,7 +1,7 @@
 {
-  "NaverdelayMs": 10000,
-  "ExistdelayMs": 60000,
-  "NaverdisplayCount": 1,
+  "NaverdelayMs": 8000,
+  "ExistdelayMs": 5000,
+  "NaverdisplayCount": 300,
   "ExistMaxPhoneCount": 50,
   "ExistMinPhoneCount": 1,
   "searchAreaSize": 30,

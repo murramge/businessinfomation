@@ -45,3 +45,9 @@ https://inpa.tistory.com/entry/node-%F0%9F%93%9A-PM2-%EB%AA%A8%EB%93%88-%EC%82%A
 
 pm2 로그
 https://velog.io/@sinclebear/PM2-Log-%EC%82%AC%EC%9A%A9%EB%B0%A9%EB%B2%95
+
+pm2로 로그 작업 (파일 생성 및 다양한..)
+https://darrengwon.tistory.com/1120
+
+pm2 설정
+https://wickedmagica.tistory.com/118

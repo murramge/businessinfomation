@@ -17,7 +17,9 @@
   },
   "scripts": {
     "naver_dev": "node --loader ts-node/esm ./src/app.ts naver_map",
-    "start": "npm run naver_dev"
+    "start": "npm run naver_dev",
+    "pm2": "pm2 start ecosystem.config.js",
+    "postinstall": "pm2 install typescript"
   },
   "devDependencies": {
     "@types/formdata": "^0.10.1",
@@ -25,6 +27,7 @@
     "@types/node-schedule": "^2.1.0",
     "@types/urlencode": "^1.1.2",
     "nodemon": "^2.0.20",
+    "pm2": "^5.2.2",
     "ts-node": "^10.9.1"
   }
 }

@@ -1,3 +1,5 @@
+import { application } from "express";
+import { requestData } from "../interface/output";
 import { API_AXIOS } from "./Axios";
 
 export default {
@@ -29,16 +31,18 @@ export default {
       message: any;
       data: string[];
     }>(`/targetCategoryName?size=${size}`),
-  completeArea: (formdata: any) =>
-    API_AXIOS.post(`/areaCollectComplete`, formdata, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    }),
-  completeCategory: (formdata: any) =>
-    API_AXIOS.post(`/categoryCollectComplete`, formdata, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    }),
+  completeArea: (areaname: any) =>
+    API_AXIOS.post(`/areaCollectComplete`, { areaName: areaname }),
+  completeCategory: (categoryname: any) =>
+    API_AXIOS.post(`/categoryCollectComplete`, { categoryName: categoryname }),
+  addBizData: (bizCompanyInfo: any) =>
+    API_AXIOS.post<{
+      code: number;
+      message: any;
+      data: any;
+    }>(
+      `/addBizCompany`,
+
+      { bizCompanyInfo: [bizCompanyInfo] }
+    ),
 };

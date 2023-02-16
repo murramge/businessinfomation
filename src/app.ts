@@ -10,13 +10,13 @@ const moduleParam = process.argv[2];
 
 const targetModule = crawlerModules[moduleParam];
 
-const resultList = schedule.scheduleJob(config.schedule10mCode, () => {
-  (async function () {
-    let log = (str: string) =>
-      loger(`${new Date().toString()}: ${targetModule.key} : ${str}`);
-    log(`크롤링 시작`);
-    const result = await targetModule.crawling();
+// const resultList = schedule.scheduleJob(config.schedule1tCode, () => {
+(async function () {
+  let log = (str: string) =>
+    loger(`${new Date().toString()}: ${targetModule.key} : ${str}`);
+  log(`크롤링 시작`);
+  const result = await targetModule.crawling();
 
-    log(`${result.count}개 수집완료`);
-  })();
-});
+  log(`${result.count}개 수집완료`);
+})();
+// });
